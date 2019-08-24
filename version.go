@@ -31,12 +31,12 @@ import (
 )
 
 const (
-	SIZEOF_VERSION = 4
+	SIZEOF_VERSION = 3
 )
 
 // 版本
 type Version struct {
-	Main, Milestone, Minor, Build byte
+	Main, Milestone, Minor byte
 }
 
 func atou8(str string) byte {
@@ -67,11 +67,6 @@ func (this *Version) Cmp(v *Version) (i int) {
 	}
 
 	i = int(this.Minor) - int(v.Minor)
-	if i != 0 {
-		return
-	}
-
-	i = int(this.Build) - int(v.Build)
 	return
 }
 
@@ -109,7 +104,7 @@ func (this *Version) MainMilestone() string {
 }
 
 func (this *Version) String() string {
-	return "v" + u8toa(this.Main) + "." + u8toa(this.Milestone) + "." + u8toa(this.Minor) + "." + u8toa(this.Build)
+	return "v" + u8toa(this.Main) + "." + u8toa(this.Milestone) + "." + u8toa(this.Minor)
 }
 
 func (this *Version) SetString(str string) *Version {
@@ -130,32 +125,13 @@ func (this *Version) SetString(str string) *Version {
 
 	if num > 2 {
 		this.Minor = atou8(strs[2])
-	} else {
-		return this
 	}
 
-	if num > 3 {
-		this.Build = atou8(strs[3])
-	}
 	return this
 }
 
-func VersionNew() *Version {
-	return &Version{0, 0, 0, 0}
-}
-
-func VersionNew1(main byte) *Version {
-	return &Version{main, 0, 0, 0}
-}
-
-func VersionNew2(main, milestone byte) *Version {
-	return &Version{main, milestone, 0, 0}
-}
-
-func VersionNew3(main, milestone, minor byte) *Version {
-	return &Version{main, milestone, minor, 0}
-}
-
-func VersionNew4(main, milestone, minor, build byte) *Version {
-	return &Version{main, milestone, minor, build}
+func VersionNew(b ...byte) (ver *Version) {
+	ver = &Version{}
+	copy((*(*[SIZEOF_VERSION]byte)(unsafe.Pointer(ver)))[:], b)
+	return
 }

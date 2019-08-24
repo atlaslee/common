@@ -30,24 +30,24 @@ import (
 )
 
 func TestVersionBytes(t *testing.T) {
-	b := VersionNew4(1, 1, 1, 1).Bytes()
-	if !bytes.Equal(b, []byte{1, 1, 1, 1}) {
+	b := VersionNew(1, 1, 1).Bytes()
+	if !bytes.Equal(b, []byte{1, 1, 1}) {
 		t.Fatal(b)
 	}
 }
 
 func TestVersionSetBytes(t *testing.T) {
 	v := VersionNew()
-	v.SetBytes([]byte{1, 1, 1, 1})
-	if !VersionNew4(1, 1, 1, 1).Equal(v) {
+	v.SetBytes([]byte{1, 1, 1})
+	if !VersionNew(1, 1, 1).Equal(v) {
 		t.Fatal(v)
 	}
 }
 
 func TestVersionCmp(t *testing.T) {
-	v0 := VersionNew4(1, 1, 1, 1)
+	v0 := VersionNew(1, 1, 1)
 	v1 := VersionNew()
-	v1.SetBytes([]byte{1, 0, 1, 1})
+	v1.SetBytes([]byte{1, 0, 1})
 
 	if v0.Cmp(v1) <= 0 {
 		t.Fatal(v0, v1, v0.Cmp(v1))
@@ -55,16 +55,16 @@ func TestVersionCmp(t *testing.T) {
 }
 
 func TestVersionString(t *testing.T) {
-	v := VersionNew4(1, 1, 1, 1)
-	if v.String() != "v1.1.1.1" {
+	v := VersionNew(1, 1, 1)
+	if v.String() != "v1.1.1" {
 		t.Fatal(v)
 	}
 }
 
 func TestVersionSetString(t *testing.T) {
 	v := VersionNew()
-	v.SetString("v1.1.1.1")
-	if v.Cmp(VersionNew4(1, 1, 1, 1)) != 0 {
+	v.SetString("v1.1.1")
+	if v.Cmp(VersionNew(1, 1, 1)) != 0 {
 		t.Fatal(v)
 	}
 }
