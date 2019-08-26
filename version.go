@@ -25,6 +25,7 @@ SOFTWARE.
 package common
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 	"unsafe"
@@ -34,7 +35,10 @@ const (
 	SIZEOF_VERSION = 3
 )
 
-// 版本
+var (
+	ERR_UNSUPPORT_VERSION = errors.New("Version is unsupported.")
+)
+
 type Version struct {
 	Main, Milestone, Minor byte
 }
@@ -51,10 +55,6 @@ func u8toa(u byte) string {
 	return strconv.Itoa(int(u))
 }
 
-// 与另一个版本比较
-// 大于0则本版本更新
-// 等于0则两者版本一致
-// 小于0则本版本更旧
 func (this *Version) Cmp(v *Version) (i int) {
 	i = int(this.Main) - int(v.Main)
 	if i != 0 {
